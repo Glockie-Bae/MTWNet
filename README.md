@@ -23,7 +23,7 @@ Most time series methods rely on trend–seasonality decomposition, but industri
 1. Install requirements. ```pip install -r requirements.txt```
 2. Download data. You can download UEA2018 datasets from [Time Series Machine Learning Websitr](https://www.timeseriesclassification.com/index.php)
  > The  industrial spot welding dataset is available upon request from the corresponding author (augepang@scnu.edu.cn).
-3. Train the model. We provide the experiment scripts of all benchmarks under the folder `./scripts`. You can reproduce the experiment results by:
+3. Train the model. We provide the experiment scripts of all benchmarks under the folder `./scripts`.
 
 ## Main Results
 We conduct extensive experiments to evaluate the performance of GLMS, covering classification and short-term forecasting, including 28 UEA real-world and 6 real-world forecasting benchmarks.
@@ -64,5 +64,6 @@ We appreciate the following GitHub repos a lot for their valuable code and effor
 If you have any questions or want to use the code, feel free to contact:
 * Rongjie Zhang (zrj22127@gmail.com)
 * Xiongwen Pang (augepang@scnu.edu.cn)
+
 
 
