@@ -2,7 +2,7 @@
 
 Global Trend and Local Fluctuation: A Modeling Strategy for Non-Periodic Multi-Stage Data
 
-In this paper, we present GLMS as a powerful framework for industrial and benchmark time series analysis, which can
+In this paper, we present MTWNet as a powerful framework for industrial and benchmark time series analysis, which can
 
 🏆 Achieve state-of-the-art performance on both the industrial spot welding dataset and the UEA2018 benchmark datasets.
 
@@ -10,12 +10,12 @@ In this paper, we present GLMS as a powerful framework for industrial and benchm
 
 
 
-## Global Trend and Local Fluctuation Modeling Strategy 
+## Multi-perspective Temporal 2D-Variation Wavelet Net for Non-Periodic Time Series Classification
 
-Most time series methods rely on trend–seasonality decomposition, but industrial production data are multi-stage and usually non-periodic. GLMS tackles this by using adaptive windows to capture potential temporal dependencies, overcoming the limitations of existing methods on non-periodic data.
+Most time series methods rely on trend–seasonality decomposition, but industrial production data are multi-stage and usually non-periodic. MTWNet tackles this by using adaptive windows to capture potential temporal dependencies, overcoming the limitations of existing methods on non-periodic data.
 
 <p align="center">
-<img src=".\pic\GLMS.png" alt="" align=center />
+<img src=".\pic\MTWNet.png" alt="" align=center />
 </p>
 
 ## Get Started
@@ -26,8 +26,8 @@ Most time series methods rely on trend–seasonality decomposition, but industri
 3. Train the model. We provide the experiment scripts of all benchmarks under the folder `./scripts`.
 
 ## Main Results
-We conduct extensive experiments to evaluate the performance of GLMS, covering classification and short-term forecasting, including 28 UEA real-world and 6 real-world forecasting benchmarks.
-**🏆 GLMS achieves consistent state-of-the-art performance in all benchmarks**, covering a large variety of series with different frequencies, variate numbers and real-world scenarios.
+We conduct extensive experiments to evaluate the performance of MTWNet, covering classification and short-term forecasting, including 28 UEA real-world and 6 real-world forecasting benchmarks.
+**🏆 MTWNet achieves consistent state-of-the-art performance in all benchmarks**, covering a large variety of series with different frequencies, variate numbers and real-world scenarios.
 
 ### Industrial datasets
 
@@ -45,7 +45,7 @@ We conduct extensive experiments to evaluate the performance of GLMS, covering c
 
 ### Model Ablations
 
-To verify the effectiveness of each component of GLMS, we provide a detailed ablation study of the Multi-scale Wavelet Convolution and Frequency-domain Detail Enhancement modules on all 29 experimental benchmarks.
+To verify the effectiveness of each component of MTWNet, we provide a detailed ablation study of the Multi-scale Wavelet Convolution and Frequency-domain Detail Enhancement modules on all 29 experimental benchmarks.
 
 <p align="center">
 <img src=".\pic\ablation.png" alt="" align=center />
@@ -64,6 +64,7 @@ We appreciate the following GitHub repos a lot for their valuable code and effor
 If you have any questions or want to use the code, feel free to contact:
 * Rongjie Zhang (zrj22127@gmail.com)
 * Xiongwen Pang (augepang@scnu.edu.cn)
+
 
 
 
