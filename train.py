@@ -7,14 +7,14 @@ from utils.str2bool import str2bool
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--task_name', type=str, default='long_term_forecast', help='task') # ['classification', 'long_term_forecast']
+parser.add_argument('--task_name', type=str, default='TSER', help='task') # ['classification', 'long_term_forecast','TSER']
 parser.add_argument('--data', type=str, default='ETTh1', help='dataset type')
 parser.add_argument('--check_path', type=str, default='./trial_checkpoint', help='task')
-parser.add_argument('--dataset_path', type=str, default="F:\_Sorrow\SCNU_M\数据\DotDataset\public_dataset\Multivariate_ts\\", help='task dataset')
+parser.add_argument('--dataset_path', type=str, default="../DotDataset/public_dataset/Multivariate_ts/", help='task dataset')
 parser.add_argument('--dataset_name', type=str, default="AtrialFibrillation", help='task dataset')
-parser.add_argument('--public_data', type=bool, default=True)
-parser.add_argument('--classification', type=str, default="long_term_forecast", help='["Binary", "Multi", "TSER", long_term_forecast]')
-parser.add_argument('--dataset', type=str, default="F:\_Sorrow\SCNU_M\数据\DotDataset\DotDateset\\all\\", help='task dataset')
+parser.add_argument('--public_data', type=bool, default=False)
+#parser.add_argument('--classification', type=str, default="TSER", help='["Binary", "Multi", "TSER", long_term_forecast]')
+parser.add_argument('--dataset', type=str, default="../DotDataset/DotDateset/all/", help='task dataset')
 parser.add_argument('--features', type=str, default='M',
                         help='forecasting task, options:[M, S, MS]; M:multivariate predict multivariate, S:univariate predict univariate, MS:multivariate predict univariate')
 
@@ -31,6 +31,9 @@ parser.add_argument('--enc_in', type=int, default=6,      help='encoder input si
 
 # 8 16 32 128
 # 3
+parser.add_argument('--layer_hp', type=str, default=[['TaylorKAN', 4], ['TaylorKAN', 4], ['JacobiKAN', 4], ['JacobiKAN', 4]],    help='num of encoder layers')
+parser.add_argument('--hidden_dim', type=int, default=64,   help='dimension of model')
+parser.add_argument('--layer_type', type=str, default='MoK',   help='["MoK", "Linear"]')
 parser.add_argument('--d_model', type=int, default=16,   help='dimension of model')
 parser.add_argument('--n_heads', type=int, default=3,     help='num of heads')
 
@@ -50,7 +53,7 @@ parser.add_argument('--gpu', type=int, default=0,          help='gpu')
 # forecasting task
 parser.add_argument('--seq_len', type=int, default=96, help='input sequence length')
 parser.add_argument('--label_len', type=int, default=48, help='start token length')
-parser.add_argument('--pred_len', type=int, default=192, help='prediction sequence length')
+parser.add_argument('--pred_len', type=int, default=96, help='prediction sequence length')
 parser.add_argument('--seasonal_patterns', type=str, default='Monthly', help='subset for M4')
 parser.add_argument('--inverse', action='store_true', help='inverse output data', default=False)
 parser.add_argument('--target', type=str, default='OT', help='target feature in S or MS task')
@@ -116,46 +119,48 @@ parser.add_argument('--embed', type=str, default='timeF',
                         help='time features encoding, options:[timeF, fixed, learned]')
 
 #----------------------train epoch --------------------------
-parser.add_argument('--epoch_count', type=int, default=10,
+parser.add_argument('--epoch_count', type=int, default=30,
                         help='the maximum count of the epoch in training')
 parser.add_argument('--trial', type=int, default=10,
                         help='the maximum count of the epoch in all training')
 
 
+
 parser.add_argument('--loss_fn', type=str, default="CrossEntropyLoss",
-                        help='CrossEntropyLoss or FocalLoss of FocalLoss_a')
+                        help='CrossEntropyLoss or FocalLoss of FocalLoss_a') # ['CrossEntropyLoss', 'MSELoss','ModelSelf']
+parser.add_argument('--gamma', type=float, default=2)
+parser.add_argument('--alpha', type=float, default=0.33)
+parser.add_argument('--reduction', type=str, default='mean')
+
 parser.add_argument('--num_class', type=int, default=2,
                         help='num_class')
 
 parser.add_argument('--batch_size', type=int, default=16,
                         help='batch_size')
 
+parser.add_argument('--get_MoE_para', type=bool, default=False)
+
 args = parser.parse_args()
 args.device = f"cuda:{args.gpu}" if torch.cuda.is_available() and args.use_gpu else "cpu"
 print(f"use cuda:{args.gpu}")
 print(f"save check_point path is {args.check_path}")
-print(f"dataset path is {args.dataset_path}")
 
 if not os.path.exists(args.check_path):
     print(f"make dir: {args.check_path}")
     os.mkdir(os.path.join(args.check_path))
 
 
-
-
-
-
 if __name__ == "__main__":
 
     model_list = ["MFC_v3"]
-    print(f"Train Mode : {args.classification}")
+    print(f"Train Mode : {args.task_name}")
     for model in model_list:
 
         args.model = model
         print(f"Start Model : {model}")
         Model = importlib.import_module(f'models.{args.model}').Model
 
-        if args.classification == "TSER":
+        if args.task_name == "TSER":
             if args.public_data == True:
                 import sys
 
@@ -172,7 +177,7 @@ if __name__ == "__main__":
 
                 a = TSER_Fit(args, Model)
                 a.Fit()
-        elif args.classification == "long_term_forecast":
+        elif args.task_name == "long_term_forecast":
             import sys
 
             sys.path.append("./code/")
@@ -181,7 +186,8 @@ if __name__ == "__main__":
             a = TSF_Fit(args, Model)
             a.Fit()
 
-        else:
+
+        elif args.task_name == "classification":
             if args.public_data == True:
                 import sys
 
